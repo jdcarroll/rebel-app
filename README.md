@@ -1,0 +1,2 @@
+# Rebel-App
+The Purpose of the application is to allow the consumer a friendly and concise way to view, manage, and monitor his or her own home or enterprise network. Currently the network monitoring tools on the market are build for and used by IT professionals so they have some background knowledge on how to do it. What about the casual homeowner that wants to have a way to verify that their ISP (Internet Service Provider) is doing their job.
