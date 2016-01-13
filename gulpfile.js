@@ -17,16 +17,19 @@ gulp.task('styles', function(){
     return gulp.src('./styles/main.scss') 
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest('public/css'))
+        .pipe(rename({suffix: '.min'}))
+        .pipe(minifycss())
+        .pipe(gulp.dest('public/css'))
         .pipe(notify({ message: 'Styles task complete'}))
 });
 
 gulp.task('scripts', function(){
-    return gulp.src('src/scripts/**/*.js')
+    return gulp.src('./js/**/*.js')
                .pipe(concat('main.js'))
-               .pipe(gulp.dest('dist/assets/js'))
+               .pipe(gulp.dest('public/js'))
                .pipe(rename({suffix: '.min'}))
                .pipe(uglify())
-               .pipe(gulp.dest('dist/assests/js'))
+               .pipe(gulp.dest('public/js'))
                .pipe(notify({ message: 'Scripts task complete' }))
 });
 
@@ -55,12 +58,15 @@ gulp.task('default', function(){
 
 
 gulp.task('watch',function(){
-    
+
+    // setup livereload
+    livereload.listen();
+
     // watch sass files
     gulp.watch('./styles/**/*.scss', ['styles']);
     
     // watch JS files
-    gulp.watch('./scripts/**/*.js', ['scripts']);
+    gulp.watch('./js/**/*.js', ['scripts']);
     
     // watch images files
     gulp.watch('./img/**/*', ['images']);

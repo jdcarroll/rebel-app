@@ -1,8 +1,24 @@
 doctype html
-html(ng-app)
+html(ng-app="rebel-app")
     head
         title= title
+        // bootstrap
         link(rel='stylesheet', href='/bootstrap/dist/css/bootstrap.min.css')
+
+        // independent css
+        link(rel='stylesheet', href='/css/sb-admin-main.css')
+        link(rel='stylesheet', href='/css/sb-admin-2.css')
+        link(rel='stylesheet', href='/css/timeline.css')
+        link(rel='stylesheet', href='/angular-loading-bar/build/loading-bar.min.css')
         link(rel='stylesheet', href='/font-awesome/css/font-awesome.min.css')
+        script(src='jquery/dist/jquery.min.js')
         script(src='angular/angular.min.js')
+        script(src='angular-route/angular-route.min.js')
+        script(src='bootstrap/dist/js/bootstrap.min.js')
+        script(src='angular-loading-bar/build/loading-bar.min.js')
+        script(src='angular-bootstrap/ui-bootstrap-tpls.min.js')
+        script(src='https://cdn.socket.io/socket.io-1.4.3.js')
+        script(src='metisMenu/dist/metisMenu.min.js')
+        script(src='Chart.js/Chart.min.js')
+        script(src='js/app.js')
    body

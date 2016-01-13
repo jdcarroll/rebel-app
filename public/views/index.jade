@@ -1,11 +1,8 @@
 include head.jade
-        nav.navbar.navbar-default.navbar-fized-top(style="margin-bottom: 0")
-        div.navbar-default.sidbar(role="navigation")
-            div.sidbar-nav.navbar-collapse
-                ul#side-menu.nav.in
-                    li.sidebar-search
-                        div.input-group.custom-search-form
-                            input(type="text",placeholder="Search...").form-control
-                            span.input-group-btn
-                                button.btn.btn-default(type="button")
-                                    i.fa.fa-search
+        include head-nav.jade
+        div#page-wrapper
+            div.ng-scope
+                    div.row
+                        div.col-lg-12(ng-view)
+                            h1.page-header Rebel Dashboard
+                            p {{search}}
