@@ -15,7 +15,7 @@ console.log('-------------App Configururation----------------');
 global.App = {
     app: express(),
     express: express,
-    port: process.env.PORT || 4000,
+    port: process.env.PORT || 80,
     version: packageJson.version,
     root: path.join(__dirname, '..'),
     handler: handler,

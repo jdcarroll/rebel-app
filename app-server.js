@@ -11,10 +11,11 @@ App.app.use(App.publicDir);
 
 App.app.get('/', App.handler.dashboard);
 
-App.app.get('/templates/:jade', function (req, res)
-         { var name = req.params.jade;
-                res.render('templates/' + name);
-         });
+App.app.get('/views/templates/:name', function (req, res){ 
+    var name = req.params.name;
+    res.render('templates/' + name);
+});
+
 App.io.on('connection', function(socket){
     console.log('connected')
     var running = false;// determination variable
