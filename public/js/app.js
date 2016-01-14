@@ -18,6 +18,8 @@ var app = angular.module("rebel-app", ["ngRoute"])
 
       $scope.msgDiv = document.getElementById("msg");
       
+      count = 0;
+      turnOn = '';
       $scope.btnStartClick = function() {
         $scope.msgDiv.innerHTML = "<h3>Speed test in progress. Please wait...</h3>";
         SomApi.startTest();
@@ -43,8 +45,14 @@ var app = angular.module("rebel-app", ["ngRoute"])
         
         $scope.buttonPress = function() {
             console.log('button pressed');
-            var send = 'on';
-            socket.emit('buttonPress', send)
+            if (count == 0){
+                 turnOn = 'on';
+                 count = 1;
+            }else if (count == 1){
+                turnOn = 'off';
+                count = 0;
+            }
+            socket.emit('buttonPress', turnOn)
         }
         socket.on('buttonPress', function(data) {
           console.log(data)

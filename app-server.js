@@ -27,6 +27,7 @@ App.io.on('connection', function(socket){
         if(!running) return false;
         var packet = App.pcap.decode.packet(raw_packet);
         socket.emit('buttonPress', packet);
+        App.db.packets.insert(packet)
     })
     socket.on('buttonPress', function(data){
             console.log(data);

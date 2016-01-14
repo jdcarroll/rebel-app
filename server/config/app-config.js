@@ -6,7 +6,8 @@ var env         = process.env.NODE_ENV || 'Development'
 ,   io          = require('socket.io')()
 ,   pcap        = require('../../node_pcap')
 ,   handler     = require('../routes/handlers.js')
-,   ioclient   = require('socket.io-client');
+,   ioclient    = require('socket.io-client')
+,   mongojs     = require('mongojs');
 
 console.log('------------------------------------------------');
 console.log('---------Loading Rebel ISP Monitoring-----------');
@@ -21,6 +22,7 @@ global.App = {
     handler: handler,
     server: server,
     io: io,
+    db: mongojs('rebel-app', ['packets']),
     pcap: pcap,
     publicDir: express.static('public'),
     bowerDir: express.static('bower_components'),
