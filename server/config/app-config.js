@@ -7,7 +7,8 @@ var env         = process.env.NODE_ENV || 'Development'
 ,   pcap        = require('../../node_pcap')
 ,   handler     = require('../routes/handlers.js')
 ,   ioclient    = require('socket.io-client')
-,   mongojs     = require('mongojs');
+,   mongojs     = require('mongojs')
+,   nmap_utils  = require('../../server/config/node_nmap.js');
 
 console.log('------------------------------------------------');
 console.log('---------Loading Rebel ISP Monitoring-----------');
@@ -26,6 +27,13 @@ global.App = {
     pcap: pcap,
     publicDir: express.static('public'),
     bowerDir: express.static('bower_components'),
+    utils: {
+        nmap : {
+            activeInterface: nmap_utils.activeInterface,
+            discover: nmap_utils.discover,
+            setSubnet: nmap_utils.setSubnet
+        }        
+    },
     appPath: function(path) {
         return this.root + '/' + path
     },

@@ -1,0 +1,17 @@
+ // Color Variables
+
+$darkblue: #103054;
+$offWhite: #F9F5EB;
+$orange: #F48A2C;
+
+body {
+    background-color: $darkblue;
+}
+
+.navbar-default {
+    background-color: $darkblue;
+}
+
+a {
+    color: $orange;
+}

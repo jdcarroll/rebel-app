@@ -1,8 +1,26 @@
 
 h1.page-header Rebel Dashboard from Jade
 
-button.btnStart(type="button" ng-click="btnStartClick()") Speed Test
-div#msg
+div.panel.panel-default
+    div.panel-heading
+        h2 
+            small Rebel Speed Test
+    div.panel-body
+        p Run speed test to determine actual network bandwidth speeds
+        button.btnStart.btn.btn-warning(type="button" ng-click="btnStartClick();") Speed Test
+        div.panel.panel-primary(ng-show="title")
+            div.panel-heading
+                {{title}}
+            div.panel-body
+                p Download: {{ result.download }}
+                p Upload: {{ result.upload }}
+                p Test Server: {{ result.testServer }}
+                p IP Address: {{ result.ip_address }}
 
-textarea.form-control
-button.btn.btn-primary#startServer(ng-click="buttonPress()") Start Server
+div.panel.panel-default
+    div.panel-heading
+        h2
+            small Rebel Network Capture
+    div.panel-body
+        textarea.form-control
+        button.btn.btn-primary#startServer(ng-click="buttonPress()") Start Server

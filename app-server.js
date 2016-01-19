@@ -30,15 +30,12 @@ App.io.on('connection', function(socket){
         App.db.packets.insert(packet)
     })
     socket.on('buttonPress', function(data){
-            console.log(data);
         if (data == 'on'){
             running = true;
         }else if(data == 'off'){
             running = false;
         }
     })
-    //
-
 });
 
 App.start();

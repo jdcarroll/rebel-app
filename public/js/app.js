@@ -5,39 +5,48 @@ var app = angular.module("rebel-app", ["ngRoute"])
                 templateUrl: "views/templates/dashboard",
                 controller: "dashboardCRTL"
           })
+          .when('/settings',{
+                templateUrl: "views/templates/settings",
+                controller: "settingsCTRL"
+          })
           .otherwise({
                 redirectTo: "/"
-          })
+          });
+
     }).controller("dashboardCRTL", function($scope, socket){
 
-      SomApi.account = "SOM524dca9d0aae6";   //your API Key here
-      SomApi.domainName = "localhost";      //your domain or sub-domain here 
-      SomApi.config.sustainTime = 4; 
-      SomApi.onTestCompleted = $scope.onTestCompleted;
-      SomApi.onError = $scope.onError;
+      var onProgress = function() {
+        console.log('change')
+      }
 
+      $scope.title = '';      
       $scope.msgDiv = document.getElementById("msg");
       
+      var onTestCompleted = function(testResult) {
+        $scope.title = "Speed Test Results";
+        $scope.result = testResult;
+        console.log($scope.result.download);
+        $scope.$apply();
+
+      }
+
+      SomApi.account = "SOM55f2730ada636";   //your API Key here
+      SomApi.domainName = "localhost";      //your domain or sub-domain here 
+      SomApi.config.sustainTime = 4; 
+      SomApi.onTestCompleted = onTestCompleted;
+      SomApi.onError = $scope.onError
+      SomApi.onProgress = onProgress;
+      SomApi.config.progress.enabled = true
+      SomApi.config.progress.verbose = true
+     
       count = 0;
       turnOn = '';
       $scope.btnStartClick = function() {
-        $scope.msgDiv.innerHTML = "<h3>Speed test in progress. Please wait...</h3>";
+        $scope.title = "Speed Test in Procress...";
         SomApi.startTest();
         console.log('buttonPress');
       }
       
-      $scope.onTestCompleted = function(testResult) {
-        $scope.msgDiv.innerHTML = 
-        "<h3>"+
-          "Download: "   +testResult.download +"Mbps <br/>"+
-          "Upload: "     +testResult.upload   +"Mbps <br/>"+
-          "Latency: "    +testResult.latency  +"ms <br/>"+
-          "Jitter: "     +testResult.jitter   +"ms <br/>"+
-          "Test Server: "+testResult.testServer +"<br/>"+
-          "IP: "         +testResult.ip_address +"<br/>"+
-          "Hostname: "   +testResult.hostname +"<br/>"+
-        "</h3>";
-      }
       
       $scope.onError = function(error) {
         $scope.msgDiv.innerHTML = "Error "+ error.code + ": "+error.message;
@@ -58,6 +67,10 @@ var app = angular.module("rebel-app", ["ngRoute"])
           console.log(data)
         })
     })
+
+// .controller('settingsCTRL',function($scope, $http){
+//     console.log('Hello From settings Ctrl')
+// })
 
 app.factory('socket', function ($rootScope) {
   var socket = io('http://localhost:80');
