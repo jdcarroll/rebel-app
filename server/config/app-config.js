@@ -23,7 +23,7 @@ global.App = {
     handler: handler,
     server: server,
     io: io,
-    db: mongojs('rebel-app', ['packets']),
+    db: mongojs('rebel-app', ['packets', 'bandwidth']),
     pcap: pcap,
     publicDir: express.static('public'),
     bowerDir: express.static('bower_components'),

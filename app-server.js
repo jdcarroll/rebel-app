@@ -36,6 +36,10 @@ App.io.on('connection', function(socket){
             running = false;
         }
     })
+
+    socket.on('bandwidth', function(data){
+        App.db.bandwidth.insert(data);
+    })
 });
 
 App.start();

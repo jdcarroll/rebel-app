@@ -3,7 +3,7 @@ var app = angular.module("rebel-app", ["ngRoute"])
       $routeProvider
           .when("/",{
                 templateUrl: "views/templates/dashboard",
-                controller: "dashboardCRTL"
+                controller: "dashboardCTRL"
           })
           .when('/settings',{
                 templateUrl: "views/templates/settings",
@@ -13,7 +13,9 @@ var app = angular.module("rebel-app", ["ngRoute"])
                 redirectTo: "/"
           });
 
-    }).controller("dashboardCRTL", function($scope, socket){
+    })
+
+app.controller("dashboardCTRL", function($scope, socket){
 
       var onProgress = function() {
         console.log('change')
@@ -25,7 +27,6 @@ var app = angular.module("rebel-app", ["ngRoute"])
       var onTestCompleted = function(testResult) {
         $scope.title = "Speed Test Results";
         $scope.result = testResult;
-        console.log($scope.result.download);
         $scope.$apply();
 
       }
@@ -41,6 +42,8 @@ var app = angular.module("rebel-app", ["ngRoute"])
      
       count = 0;
       turnOn = '';
+      var chunk = [];
+      var packetSize_total = 0;
       $scope.btnStartClick = function() {
         $scope.title = "Speed Test in Procress...";
         SomApi.startTest();
@@ -64,7 +67,38 @@ var app = angular.module("rebel-app", ["ngRoute"])
             socket.emit('buttonPress', turnOn)
         }
         socket.on('buttonPress', function(data) {
-          console.log(data)
+          //starting to manipulate packet data
+            console.log(data);
+            chunk.push(data);
+            if (chunk.length == 10){
+                count = 1;
+                socket.emit('buttonPress', turnOn);
+                var start = chunk[0].pcap_header.tv_sec,
+                    start_mil = chunk[0].pcap_header.tv_usec,
+                    end = chunk[9].pcap_header.tv_sec,
+                    end_mil = chunk[9].pcap_header.tv_usec
+
+                var startTime = Number(start.toString() + "." + start_mil.toString());
+                var endTime = Number(end.toString() + "." + end_mil.toString());
+                
+                var time = endTime - startTime;
+                
+                chunk.forEach(function(e){
+                   packetSize_total += e.pcap_header.len
+                })    
+                
+                var bandwidth = ((packetSize_total / time) / chunk.length);
+                console.log("Bandwith: " + bandwidth + "MPS")
+                obj = {
+                    starting_packet: startTime,
+                    bandwidth: bandwidth,
+                    ending_packet: endTime
+                }
+
+                socket.emit('bandwidth', obj);
+                    
+                chunk = [];
+            }
         })
     })
 
