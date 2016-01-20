@@ -8,6 +8,16 @@ body {
     background-color: $darkblue;
 }
 
+.navbar-default{
+    .navbar-brand{
+        color: $offWhite;
+        a:hover {
+            color: $offWhite;
+            text-decoration: underline;
+        }
+    }
+}
+
 .navbar-default {
     background-color: $darkblue;
 }
