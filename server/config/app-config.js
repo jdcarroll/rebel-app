@@ -8,7 +8,10 @@ var env         = process.env.NODE_ENV || 'Development'
 ,   handler     = require('../routes/handlers.js')
 ,   ioclient    = require('socket.io-client')
 ,   mongojs     = require('mongojs')
-,   nmap_utils  = require('../../server/config/node_nmap.js');
+,   nmap_utils  = require('../../server/config/node_nmap.js')
+,   spawn       = require('child_process').spawn
+,   packet      = require('../../server/config/packet_test.js')
+,   os          = require('os');
 
 console.log('------------------------------------------------');
 console.log('---------Loading Rebel ISP Monitoring-----------');
@@ -22,9 +25,12 @@ global.App = {
     root: path.join(__dirname, '..'),
     handler: handler,
     server: server,
+    os: os,
     io: io,
-    db: mongojs('rebel-app', ['packets', 'bandwidth']),
+    spawn: spawn,
+    db: mongojs('rebel-app', ['packets', 'bandwidth', 'devices']),
     pcap: pcap,
+    packet: packet,
     publicDir: express.static('public'),
     bowerDir: express.static('bower_components'),
     utils: {

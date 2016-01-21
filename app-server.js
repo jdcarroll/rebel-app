@@ -17,7 +17,15 @@ App.app.get('/views/templates/:name', function (req, res){
 });
 
 App.io.on('connection', function(socket){
-    console.log('connected')
+    var interfaces = App.os.networkInterfaces();
+    
+        interfaces.en0.forEach(function(e){
+            if(e.family == 'IPv4'){
+                socket.emit('connection', e)
+            }
+        })
+    
+
     var running = false;// determination variable
 
     var pcap_session = App.pcap.createSession('en0');// pcap listen server
@@ -27,7 +35,14 @@ App.io.on('connection', function(socket){
         if(!running) return false;
         var packet = App.pcap.decode.packet(raw_packet);
         socket.emit('buttonPress', packet);
-        App.db.packets.insert(packet)
+        App.packet(packet);
+        if(process.argv[2] == 'child'){
+        
+        }else{
+            var child = App.spawn(process.execPath, [__filename, 'child'],{
+                stdio: [null, null, null, 'pipe']
+            })
+        }
     })
     socket.on('buttonPress', function(data){
         if (data == 'on'){
@@ -40,6 +55,7 @@ App.io.on('connection', function(socket){
     socket.on('bandwidth', function(data){
         App.db.bandwidth.insert(data);
     })
+
 });
 
 App.start();
