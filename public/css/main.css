@@ -12,3 +12,8 @@ body {
 
 a {
   color: #F48A2C; }
+
+.logo {
+  zoom: 12%;
+  padding-top: 65px;
+  padding-right: 45px; }
