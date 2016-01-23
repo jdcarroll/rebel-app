@@ -28,13 +28,17 @@ App.io.on('connection', function(socket){
         if(e.family == 'IPv4'){
             socket.emit('connection', e)
             active_interface = e;
-            console.log('inside forEach: ', active_interface.netmask);
         }
     })
+    var found_devices = []
+    App.db.devices.find(function(err, devices){
+        if (err || !devices ) console.log("No Devices found");
+        else devices.forEach( function(device){
+            found_devices.push(device);
+        })
+    });
+    
 
-             console.log('outside foreach: ', active_interface);
-    
-    
     var running = false;// determination variable
 
     var pcap_session = App.pcap.createSession('en0');// pcap listen server
@@ -43,24 +47,36 @@ App.io.on('connection', function(socket){
     // pcap socket
     pcap_session.on('packet', function(raw_packet){
         
-        //testing loop run code oncei
-        if(testcount == 0){
-            console.log('inside packet', active_interface.netmask);
-            testcount = 1;
-        }
-
         if(!running) return false;
         
-        if(runningCount == 0){
-            console.log('inside running', active_interface.netmask);
-            runningCount = 1;
-        }
-        
         var packet = App.pcap.decode.packet(raw_packet);
-        socket.emit('buttonPress', packet);
 
-        var subnet = packet_config.localDevice(active_interface, packet);
-        console.log(subnet);
+        var device_incoming = packet_config.localDevice(active_interface, packet);
+        var device = [];
+        device_incoming.forEach(function(e){
+            
+            var split = e.split(',', 4);
+            split.forEach(function(e){
+                var num = Number(e);
+                device.push(num);
+            })
+        })
+       
+        found_devices.forEach(function(e){
+        
+            if(e.ip == device){
+            
+            } else{
+                App.db.devices.insert({'ip': device, "timestamp": new Date()})
+            }
+
+        })
+
+        console.log('devices: ',found_devices);
+
+        socket.emit('buttonPress', device);
+        console.log(device);
+
         })
     socket.on('buttonPress', function(data){
         

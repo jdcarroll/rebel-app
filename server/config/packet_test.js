@@ -54,16 +54,16 @@ module.exports = function(){
        var subnet = __netmask(active_interface); // calling netmask function
        var addressArray = __addresses(packet);
        var substring = subnet.toString();
-       var bob = []
+       var deviceArray = []
        addressArray.forEach(function(e){
             str = e.toString();
             if(str.includes(substring)){
-                bob.push(str);
+                deviceArray.push(str);
             } 
        })
 
        
-       return bob; 
+       return deviceArray; 
        // var subStr = subnet.toString();
        // var str = packet.payload.dhost.addr.toString();
        // var numberedArray= [];

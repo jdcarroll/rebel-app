@@ -67,7 +67,6 @@ app.controller("dashboardCTRL", function($scope, socket){
             socket.emit('buttonPress', turnOn)
         }
         socket.on('connection', function(data){
-            console.log(data);            
             $scope.network = data;
         });
         
