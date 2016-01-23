@@ -1,5 +1,5 @@
 require('./server/config/app-config.js');
-require('./server/config/packet_test.js');
+var packet_config  = require('./server/config/packet_test.js');
 
 
 //setup jade template engine
@@ -28,30 +28,42 @@ App.io.on('connection', function(socket){
         if(e.family == 'IPv4'){
             socket.emit('connection', e)
             active_interface = e;
-            console.log(e);
+            console.log('inside forEach: ', active_interface.netmask);
         }
     })
-    
+
+             console.log('outside foreach: ', active_interface);
     
     
     var running = false;// determination variable
 
     var pcap_session = App.pcap.createSession('en0');// pcap listen server
-    
+    var runningCount = 0;
+    var testcount = 0;
     // pcap socket
     pcap_session.on('packet', function(raw_packet){
+        
+        //testing loop run code oncei
+        if(testcount == 0){
+            console.log('inside packet', active_interface.netmask);
+            testcount = 1;
+        }
+
         if(!running) return false;
+        
+        if(runningCount == 0){
+            console.log('inside running', active_interface.netmask);
+            runningCount = 1;
+        }
+        
         var packet = App.pcap.decode.packet(raw_packet);
         socket.emit('buttonPress', packet);
-        if(process.argv[2] == 'child'){
-        
-        }else{
-            var child = App.spawn(process.execPath, [__filename, 'child'],{
-                stdio: [null, null, null, 'pipe']
-            })
-        }
-    })
+
+        var subnet = packet_config.localDevice(active_interface, packet);
+        console.log(subnet);
+        })
     socket.on('buttonPress', function(data){
+        
         if (data == 'on'){
             running = true;
         }else if(data == 'off'){
